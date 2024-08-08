@@ -22,5 +22,6 @@ urlpatterns = [
     path('admin/', admin.site.urls),
     path('', include('main.urls')),
     path("change-password/", auth_views.PasswordChangeView.as_view(template_name="registration/sign_up.html")), # here passwordchange view has builtin template so we are overiding here by passing as an argument
-    path('', include('django.contrib.auth.urls')) # prebuilt url in django, when we put /login it tries to find the login.html template inside registration folder
+    path('', include('django.contrib.auth.urls')), # prebuilt url in django, when we put /login it tries to find the login.html template inside registration folder
+    path('api/', include('drfuser.urls'))
 ]

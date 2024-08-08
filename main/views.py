@@ -16,24 +16,32 @@ def home(request):
         post_id = request.POST.get("post-id")
         user_id = request.POST.get("user-id")
         if post_id:
-            post = Post.objects.get(id=post_id).first()
+            post = Post.objects.get(id=post_id)
             if post and (request.user == post.author or request.user.has_perm("main.delete_post")): # main.delete_post --> app_name.action_modelname
                 # print(post)
                 post.delete()
-            elif user_id:
-                user = User.objects.get(id=user_id)
-                if user and request.user.is_staff():
+        if user_id:
+            user = User.objects.get(id=user_id)
+            if user and request.user.is_staff:
+                groups = ["default", "mod"]
+                for group_name in groups:
                     try:
-                        group = Group.objects.get(name="default")
+                        group = Group.objects.get(name=group_name)
                         group.user_set.remove(user)
-                    except:
+                    except Group.DoesNotExist:
                         pass
 
-                    try:
-                        group = Group.objects.get(name="mod")
-                        group.user_set.remove(user)
-                    except:
-                        pass
+                # try:
+                #     group = Group.objects.get(name="default")
+                #     group.user_set.remove(user)
+                # except:
+                #     pass
+
+                # try:
+                #     group = Group.objects.get(name="mod")
+                #     group.user_set.remove(user)
+                # except:
+                #     pass
 
     return render(request, 'main/home.html', {"posts":posts})
 
@@ -55,6 +63,7 @@ def sign_up(request):
 @permission_required("main.add_post", login_url="login", raise_exception=True) # main.add_post --> app_name.action_modelname
 def create_post(request):
     if request.method == "POST":
+        # print(request.POST)
         form = PostForm(request.POST)
         if form.is_valid():
             post = form.save(commit=False) # by default commit is true, why false now? becos v have to add user data, 

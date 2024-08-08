@@ -37,9 +37,12 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'drfuser.apps.DrfuserConfig',
     'main.apps.MainConfig',
     'crispy_forms',
-    'crispy_bootstrap5'
+    'crispy_bootstrap5',
+    'rest_framework',
+    'corsheaders'
 ]
 
 # CRISPY_ALLOWED_TEMPLATE_PACKS = "bootstrap5"
@@ -49,12 +52,17 @@ CRISPY_TEMPLATE_PACK = "bootstrap5"
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
+    'corsheaders.middleware.CorsMiddleware',
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
 ]
+
+CORS_ALLOW_CREDENTIALS = True # setting this to false makes frontend wont able to access the cookie that is (allows cookies to be sent in cross-domain responses) 
+# CORS_ORIGIN_WHITELIST = ['http://localhost:3000']
+CORS_ORIGIN_ALLOW_ALL = True # allowing all the frontend ports to access the django app
 
 ROOT_URLCONF = 'website.urls'
 
@@ -135,3 +143,6 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 LOGIN_REDIRECT_URL = "/home" # to redirect to home url once successfully logged in or else redirects to accounts/profile url
 LOGOUT_REDIRECT_URL = "/home"
+
+
+AUTH_USER_MODEL = 'drfuser.User'

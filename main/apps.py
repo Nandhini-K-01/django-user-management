@@ -6,7 +6,7 @@ class MainConfig(AppConfig):
     name = 'main'
 
     def ready(self):
-        from django.contrib.auth.models import User, Group
+        from django.contrib.auth.models import User, Group # django app registry must be fully initialised
         from django.db.models.signals import post_save
         def add_to_default_group(sender, instance, created, **kwargs):
             if created:
